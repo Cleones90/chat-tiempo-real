@@ -314,3 +314,80 @@ button:active {
         display: none;
     }
 }
+
+/* --- CONFIGURACIÓN DEL SAPITO --- */
+
+.sapito-contenedor {
+    position: fixed;
+    /* Ajusta estas coordenadas si quieres moverlo más a la izquierda o derecha de tu contenedor */
+    left: 50%;
+    transform: translateX(120px); /* Lo empuja hacia el borde derecho del chat */
+    top: calc(50vh - 290px);      /* Se sienta justo arriba del header */
+    z-index: 10;                  /* Queda por encima del borde del chat */
+    pointer-events: none;         /* No interfiere con los clicks */
+}
+
+.sapito {
+    font-size: 4rem;              /* Tamaño compacto y controlado */
+    position: relative;
+    display: inline-block;
+    line-height: 1;
+    /* Animación de respiración/croac */
+    animation: croac-respiracion 3s ease-in-out infinite;
+    transform-origin: bottom center;
+}
+
+.sapito .cuerpo-sapo {
+    position: relative;
+    z-index: 1;
+}
+
+/* Ojos móviles para simular parpadeo */
+.sapito .ojos {
+    position: absolute;
+    top: 6px;
+    left: 14px;
+    font-size: 1.2rem;
+    z-index: 2;
+    display: flex;
+    gap: 6px;
+    animation: parpadeo-sapo 4s linear infinite;
+}
+
+/* --- ANIMACIONES DEL SAPITO --- */
+
+/* Hace que el sapito "respire" de forma mecánica (estilo neobrutalista plano) */
+@keyframes croac-respiracion {
+    0%, 100% {
+        transform: scaleY(1) scaleX(1);
+    }
+    45% {
+        transform: scaleY(1) scaleX(1);
+    }
+    50% {
+        transform: scaleY(1.15) scaleX(0.95); /* Se infla un poco */
+    }
+    55% {
+        transform: scaleY(0.95) scaleX(1.05); /* Rebota al bajar */
+    }
+    60% {
+        transform: scaleY(1) scaleX(1);
+    }
+}
+
+/* Cierra y abre los ojos simulando el parpadeo */
+@keyframes parpadeo-sapo {
+    0%, 90%, 100% {
+        transform: scaleY(1);
+    }
+    95% {
+        transform: scaleY(0); /* Ojo cerrado */
+    }
+}
+
+/* Ocultar en celulares para que no tape el texto del header */
+@media (max-width: 850px) {
+    .sapito-contenedor {
+        display: none;
+    }
+}
