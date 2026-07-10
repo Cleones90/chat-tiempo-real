@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chat tiempo real</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <div>
+        <h1>Chat tiempo real</h1>
+        <p id="status" class="status">Conectando…</p>
+      </div>
+    </header>
+
+    <section class="chat" aria-label="Mensajes">
+      <div id="messages" class="messages" role="log" aria-live="polite"></div>
+    </section>
+
+    <form id="form" class="composer" autocomplete="off">
+      <input
+        id="name"
+        class="input"
+        type="text"
+        maxlength="30"
+        placeholder="Tu nombre"
+        required
+      />
+      <input
+        id="message"
+        class="input"
+        type="text"
+        maxlength="500"
+        placeholder="Escribe un mensaje…"
+        required
+      />
+      <button class="button" type="submit">Enviar</button>
+    </form>
+  </main>
+
+  <script src="https://cdn.socket.io/4.8.3/socket.io.min.js"></script>
+  <script src="/client.js" defer></script>
+</body>
+</html>
+
