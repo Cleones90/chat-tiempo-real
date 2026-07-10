@@ -18,9 +18,9 @@
   function escapeHtml(str) {
     return String(str)
       .replaceAll('&', '&amp;')
-      .replaceAll('<', '<')
-      .replaceAll('>', '>')
-      .replaceAll('"', '"')
+      .replaceAll('<', '&lt;') // Corregido el reemplazo para que escape bien visualmente
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
       .replaceAll("'", '&#039;');
   }
 
@@ -33,7 +33,16 @@
 
   function addMessage({ name, text, ts }) {
     const div = document.createElement('div');
-    div.className = 'msg';
+    
+    // --- NUEVA LÓGICA DE ALINEACIÓN ---
+    // Compara el nombre del mensaje con el nombre actual en tu input
+    const miNombre = (nameEl.value || '').trim();
+    if (name === miNombre && miNombre !== '') {
+      div.className = 'msg msg-me';       // Tus mensajes (Derecha)
+    } else {
+      div.className = 'msg msg-others';   // Mensajes de otros (Izquierda)
+    }
+    // ----------------------------------
 
     const avatar = document.createElement('div');
     avatar.className = 'avatar';
@@ -100,4 +109,3 @@
     messageEl.focus();
   });
 })();
-

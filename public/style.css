@@ -1,1 +1,316 @@
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;background:#0b1220;color:#e8eefc} .app{max-width:860px;margin:0 auto;padding:18px} .header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:12px 14px;border:1px solid #23304d;border-radius:14px;background:linear-gradient(180deg,#0f1b31,#0b1220)} h1{margin:0;font-size:18px} .status{margin:6px 0 0;color:#9fb2ff;font-size:13px} .chat{border:1px solid #23304d;border-radius:14px;background:#0f1b31;height:62vh;overflow:auto;padding:14px} .messages{display:flex;flex-direction:column;gap:10px} .msg{display:flex;gap:10px;align-items:flex-start} .avatar{width:34px;height:34px;border-radius:10px;background:#16264a;border:1px solid #2a3a66;display:flex;align-items:center;justify-content:center;font-weight:700;color:#cfe0ff;flex:0 0 auto} .bubble{max-width:680px;background:#121f3b;border:1px solid #24355f;border-radius:14px;padding:10px 12px} .meta{display:flex;gap:10px;align-items:baseline;margin-bottom:4px} .name{font-weight:700;color:#dbe7ff;font-size:13px} .time{color:#7f93c6;font-size:11px} .text{white-space:pre-wrap;word-break:break-word;line-height:1.35} .composer{margin-top:12px;display:grid;grid-template-columns:160px 1fr 120px;gap:10px} .input{border-radius:12px;border:1px solid #23304d;background:#0f1b31;color:#e8eefc;padding:12px 12px;outline:none} .input:focus{border-color:#4d7cff} .button{border-radius:12px;border:1px solid #2f4fff;background:#2f4fff;color:white;padding:12px 14px;cursor:pointer;font-weight:700} .button:hover{filter:brightness(1.05)} @media (max-width:740px){.composer{grid-template-columns:1fr;}.chat{height:55vh}}
+:root {
+    --bg-color: #f0f0f0;
+    --border-color: #000000;
+    --primary-neon: #a3e635; /* Verde lima neobrutalista */
+    --accent-neon: #f43f5e;  /* Rosa/Rojo para detalles */
+    --input-bg: #ffffff;
+    --shadow: 5px 5px 0px #000000;
+}
+
+body {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace, sans-serif; /* Tipografía ruda o monoespaciada */
+    background-color: var(--bg-color);
+    /* Cuadrícula de fondo opcional (estilo cuaderno técnico) */
+    background-image: 
+        linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.app {
+    width: 90%;
+    max-width: 800px;
+    background: #ffffff;
+    border: 4px solid var(--border-color);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.header {
+    background: var(--primary-neon);
+    border: 4px solid var(--border-color);
+    box-shadow: var(--shadow);
+    padding: 15px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #000;
+    text-transform: uppercase;
+}
+
+.status {
+    margin-top: 5px;
+    font-weight: bold;
+    color: #000;
+}
+
+.chat {
+    background: #fff;
+    border: 4px solid var(--border-color);
+    box-shadow: var(--shadow);
+    height: 400px;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+/* Si generas globos de mensajes dinámicamente desde JS, dales este estilo: */
+.message-item {
+    background: #fff;
+    border: 3px solid var(--border-color);
+    box-shadow: 3px 3px 0px #000;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+/* Ajusta estas clases según los nombres que tengan tus inputs en la parte inferior del HTML */
+input[type="text"] {
+    background: var(--input-bg);
+    border: 4px solid var(--border-color);
+    padding: 12px;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 1rem;
+    outline: none;
+    box-shadow: 3px 3px 0px #000;
+}
+
+input[type="text"]:focus {
+    background: #fffbdf; /* Cambia ligeramente al enfocar */
+}
+
+/* El botón de enviar */
+button, .btn-enviar {
+    background: var(--accent-neon);
+    color: #000;
+    border: 4px solid var(--border-color);
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+/* Efecto mecánico al presionar el botón */
+button:active {
+    transform: translate(5px, 5px);
+    box-shadow: 0px 0px 0px #000;
+}
+
+.messages {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Espacio entre burbujas de mensajes */
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* Estructura base para envolver el avatar y el texto juntos */
+.message-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    max-width: 75%; /* Para que no ocupen todo el ancho de la pantalla */
+}
+
+/* --- MENSAJES DE OTROS (Izquierda) --- */
+.message-wrapper.other-message {
+    align-self: flex-start;
+    flex-direction: row; /* Avatar a la izquierda, texto a la derecha */
+}
+
+.message-wrapper.other-message .message-content {
+    background: #ffffff; /* Fondo blanco rígido */
+    border: 3px solid #000000;
+    box-shadow: 3px 3px 0px #000000;
+    color: #000000;
+    padding: 10px;
+}
+
+/* --- MIS MENSAJES (Derecha) --- */
+.message-wrapper.my-message {
+    align-self: flex-end;
+    flex-direction: row-reverse; /* Avatar a la derecha, texto a la izquierda */
+}
+
+.message-wrapper.my-message .message-content {
+    background: #f43f5e; /* Rosa/Rojo llamativo (o el color neón que prefieras) */
+    border: 3px solid #000000;
+    box-shadow: -3px 3px 0px #000000; /* Sombra invertida hacia la izquierda */
+    color: #ffffff; /* Texto claro para contrastar el fondo rosa */
+    padding: 10px;
+}
+
+/* 1. Forzar al contenedor de mensajes a ser Flexbox vertical */
+#messages {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 2. Regla base para cada fila de mensaje */
+.msg {
+    display: flex !important;
+    align-items: flex-start;
+    gap: 12px;
+    max-width: 80%;
+    width: fit-content;
+}
+
+/* 3. MENSAJES DE OTROS (Izquierda - Estilo oscuro actual o el que prefieras) */
+.msg-others {
+    align-self: flex-start !important;
+}
+
+/* 4. TUS MENSAJES (Derecha - Volteado con Neón) */
+.msg-me {
+    align-self: flex-end !important;
+    flex-direction: row-reverse !important; /* Mueve el avatar a la derecha del texto */
+}
+
+/* Cambia el color de tu burbuja para diferenciarla (Azul neón brutalista en este caso) */
+.msg-me .bubble {
+    background: #00e5ff !important; 
+    color: #000000 !important;
+    border: 3px solid #000000 !important;
+    box-shadow: -4px 4px 0px #000000 !important; /* Sombra hacia la izquierda */
+}
+
+.msg-me .meta {
+    justify-content: flex-end;
+}
+
+/* --- ANIMACIONES DE FONDO --- */
+
+/* Clase base para los objetos flotantes */
+.decoracion {
+    position: fixed;
+    z-index: -1; /* Se mantiene detrás del contenedor del chat */
+    font-family: monospace;
+    font-weight: 900;
+    color: #000;
+    user-select: none;
+    pointer-events: none; /* Evita que estorben si haces click cerca */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Definición de los movimientos */
+@keyframes flotarVertical {
+    0% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-25px) rotate(15deg);
+    }
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+}
+
+@keyframes flotarGirar {
+    0% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(20px) rotate(-20deg);
+    }
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+}
+
+/* --- ESTILOS Y POSICIONES INDIVIDUALES --- */
+
+/* Estrella izquierda */
+.estrella-1 {
+    left: 8%;
+    top: 20%;
+    font-size: 3.5rem;
+    color: #ffde43; /* Amarillo Neón */
+    -webkit-text-stroke: 3px #000;
+    animation: flotarVertical 4s ease-in-out infinite;
+}
+
+/* Estrella derecha */
+.estrella-2 {
+    right: 7%;
+    top: 65%;
+    font-size: 4rem;
+    color: #f43f5e; /* Rosa Neón */
+    -webkit-text-stroke: 3px #000;
+    animation: flotarGirar 5s ease-in-out infinite;
+}
+
+/* Cuadrado flotante izquierdo */
+.cuadrado-1 {
+    left: 5%;
+    top: 55%;
+    width: 45px;
+    height: 45px;
+    background: #00e5ff; /* Cyan Neón */
+    border: 4px solid #000;
+    box-shadow: 4px 4px 0px #000;
+    animation: flotarGirar 6s ease-in-out infinite;
+}
+
+/* Círculo flotante derecho */
+.circulo-1 {
+    right: 8%;
+    top: 15%;
+    width: 50px;
+    height: 50px;
+    background: #a3e635; /* Verde Lima */
+    border: 4px solid #000;
+    border-radius: 50%;
+    box-shadow: 4px 4px 0px #000;
+    animation: flotarVertical 4.5s ease-in-out infinite;
+}
+
+/* Triángulo derecho */
+.triangulo-1 {
+    right: 12%;
+    top: 40%;
+    font-size: 3.5rem;
+    color: #ff8a00; /* Naranja */
+    -webkit-text-stroke: 3px #000;
+    animation: flotarVertical 5.5s ease-in-out infinite;
+}
+
+/* Carita feliz pixel/retro izquierda */
+.cara-1 {
+    left: 10%;
+    top: 38%;
+    font-size: 3rem;
+    background: #ffffff;
+    border: 3px solid #000;
+    padding: 5px 10px;
+    box-shadow: 4px 4px 0px #000;
+    transform: rotate(-10deg);
+    animation: flotarGirar 4.8s ease-in-out infinite;
+}
+
+/* Opcional: Ocultar los dibujitos en pantallas muy chicas (celulares) para que no se amontonen */
+@media (max-width: 1000px) {
+    .decoracion {
+        display: none;
+    }
+}
